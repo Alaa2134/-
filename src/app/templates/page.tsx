@@ -4,7 +4,7 @@ import { TemplatesGallery } from "@/components/TemplatesGallery";
 import { TEMPLATES } from "@/lib/templates";
 
 export const metadata = {
-  title: "كل القوالب — زفّة",
+  title: "كل القوالب — زفاف",
   description: "تصفّح ٥٠٠ قالب دعوة فرح إلكترونية فاخرة",
 };
 

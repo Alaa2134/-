@@ -55,7 +55,7 @@ export const useDraft = create<DraftState>()(
       reset: () => set({ draft: DEFAULT_DRAFT }),
     }),
     {
-      name: "zaffa-draft",
+      name: "zefaf-draft",
       onRehydrateStorage: () => (state) => state?.setHydrated(),
     }
   )

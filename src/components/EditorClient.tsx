@@ -233,7 +233,7 @@ export function EditorClient({ template }: { template: Template }) {
           <div className="rounded-2xl border-2 border-gold-200 bg-gradient-to-l from-gold-50 to-rose-50 p-4">
             <div className="flex items-start justify-between gap-3">
               <div>
-                <div className="font-bold text-ink-900">⭐ شيل توقيع &quot;صُنع بواسطة زفّة&quot;</div>
+                <div className="font-bold text-ink-900">⭐ شيل توقيع &quot;صُنع بواسطة زفاف&quot;</div>
                 <p className="mt-1 text-xs text-ink-600">
                   تظهر دعوتك بالكامل بدون أي إشارة للمنصة. ضيوفك يشوفوها كأنها مصممة خصيصاً لكم بس
                 </p>
@@ -280,7 +280,7 @@ export function EditorClient({ template }: { template: Template }) {
               >
                 <option value="oud">عود هادئ</option>
                 <option value="piano">بيانو رومانسي</option>
-                <option value="zaffa">زفّة شعبية</option>
+                <option value="zaffa">زفّة شعبية (طبل وزمر)</option>
                 <option value="quran">قراءة قرآن</option>
                 <option value="instrumental">موسيقى آلية</option>
               </select>

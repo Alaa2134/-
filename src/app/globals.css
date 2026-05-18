@@ -35,7 +35,7 @@ body {
 }
 
 .watermark-text::before {
-  content: "زفّة • معاينة • ادفع وفعّل";
+  content: "zefaf.online • معاينة • ادفع وفعّل";
   position: absolute;
   inset: 0;
   display: flex;

@@ -27,7 +27,7 @@ export interface Order {
     enableMusic: boolean;
     musicChoice: string;
   };
-  removeBranding?: boolean; // +300 EGP upgrade — hides "صُنع بواسطة زفّة" footer
+  removeBranding?: boolean; // +300 EGP upgrade — hides "صُنع بواسطة زفاف" footer
   customer: {
     name?: string;
     phone?: string;
@@ -53,7 +53,7 @@ export interface RSVP {
   createdAt: string;
 }
 
-const STORE_PATH = path.join("/tmp", "zaffa-orders.json");
+const STORE_PATH = path.join("/tmp", "zefaf-orders.json");
 
 function load(): Order[] {
   try {

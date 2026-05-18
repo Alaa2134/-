@@ -1,5 +1,5 @@
 // =============================================================
-// Zaffa — Template Catalog Engine
+// Zefaf — Template Catalog Engine
 // Generates 500 templates from base templates × variants
 // =============================================================
 

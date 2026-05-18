@@ -130,7 +130,7 @@ export function InvitationView({ order, template }: { order: Order; template: Te
         </a>
       </section>
 
-      {/* Made by Zaffa footer (can be removed for 300 EGP) */}
+      {/* Made by Zefaf footer (can be removed for 300 EGP) */}
       {!order.removeBranding && (
         <footer className="border-t border-black/5 bg-white/60 backdrop-blur">
           <div className="mx-auto flex max-w-2xl flex-col items-center justify-center gap-1 px-4 py-4 text-xs text-ink-500 sm:flex-row sm:gap-2">

@@ -19,6 +19,7 @@ export function AdminLoginForm() {
     });
     setSubmitting(false);
     if (res.ok) router.push("/admin");
+    // default password (dev): zefaf2026 — change via ADMIN_PASSWORD env var
     else setError("كلمة السر مش صح");
   }
 

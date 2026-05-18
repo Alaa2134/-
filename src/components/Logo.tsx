@@ -23,7 +23,7 @@ export function Logo({ size = "md", linked = true }: { size?: "sm" | "md" | "lg"
           </defs>
           <circle cx="32" cy="32" r="30" fill="url(#logo-grad)" />
           <circle cx="32" cy="32" r="26" fill="#1a1c20" />
-          {/* Z shape inspired by زفّة */}
+          {/* Z shape inspired by زفاف */}
           <path
             d="M20 22 L 44 22 L 24 42 L 44 42"
             stroke="url(#logo-grad)"
@@ -41,7 +41,7 @@ export function Logo({ size = "md", linked = true }: { size?: "sm" | "md" | "lg"
       </span>
       <span className={`font-display font-bold ${text}`}>
         <span className="bg-gradient-to-l from-gold-600 to-rose-600 bg-clip-text text-transparent">
-          زفّة
+          زفاف
         </span>
       </span>
     </span>

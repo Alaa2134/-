@@ -9,7 +9,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const t = getTemplate(id);
   if (!t) return { title: "قالب غير موجود" };
   return {
-    title: `${t.nameAr} — قالب دعوة فرح | زفّة`,
+    title: `${t.nameAr} — قالب دعوة فرح | زفاف`,
     description: `صمّم دعوة فرحك على قالب ${t.nameAr} بـ ٥٠ ج فقط`,
   };
 }

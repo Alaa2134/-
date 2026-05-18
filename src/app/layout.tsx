@@ -24,23 +24,43 @@ const aref = Aref_Ruqaa({
 });
 
 export const metadata: Metadata = {
-  title: "زفّة • منصة دعوات الأفراح الأنيقة",
+  metadataBase: new URL("https://zefaf.online"),
+  title: {
+    default: "زفاف • منصة دعوات الأفراح الإلكترونية",
+    template: "%s — زفاف",
+  },
   description:
-    "صمّم دعوة فرحك في دقائق — ٥٠٠ قالب فاخر، صور حقيقية، أنيميشن وموسيقى، ولينك خاص بدعوتك تشاركه مع كل أحبابك.",
+    "صمّم دعوة فرحك في دقائق — ٥٠٠ قالب فاخر، صور حقيقية، أنيميشن وموسيقى، ولينك خاص بدعوتك تشاركه مع كل أحبابك. على zefaf.online",
   keywords: [
     "دعوة فرح",
     "دعوة فرح إلكترونية",
     "كروت أفراح",
     "دعوة زفاف",
-    "زفّة",
+    "زفاف",
+    "زفة",
+    "zefaf",
     "wedding invitation",
     "Egypt wedding",
+    "دعوة زفاف مصر",
   ],
+  alternates: {
+    canonical: "https://zefaf.online",
+  },
   openGraph: {
-    title: "زفّة • دعوة فرحك بشكل يليق بفرحتك",
+    title: "زفاف • دعوة فرحك بشكل يليق بفرحتك",
     description: "٥٠٠ قالب راقي • أنيميشن • موسيقى • RSVP • ٥٠ ج فقط",
     type: "website",
     locale: "ar_EG",
+    url: "https://zefaf.online",
+    siteName: "زفاف",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "زفاف • منصة دعوات الأفراح الإلكترونية",
+    description: "٥٠٠ قالب راقي • أنيميشن • موسيقى • RSVP • ٥٠ ج فقط",
+  },
+  icons: {
+    icon: "/favicon.svg",
   },
 };
 

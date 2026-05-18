@@ -1,7 +1,7 @@
 {
-  "name": "zaffa",
+  "name": "zefaf",
   "version": "1.0.0",
-  "description": "Zaffa - منصة دعوات الأفراح الإلكترونية",
+  "description": "Zefaf (zefaf.online) — منصة دعوات الأفراح الإلكترونية",
   "private": true,
   "scripts": {
     "dev": "next dev",
