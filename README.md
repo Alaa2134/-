@@ -2,6 +2,10 @@
 
 > **[zefaf.online](https://zefaf.online)** — دعوة فرحك بشكل يليق بفرحتك. ٥٠٠ قالب، صور، أنيميشن، وموسيقى. بـ ٥٠ ج بس.
 
+## 🚀 انشر الموقع (نقرة واحدة)
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FAlaa2134%2F-&project-name=zefaf&env=ADMIN_PASSWORD,NEXT_PUBLIC_SITE_URL&envDescription=ADMIN_PASSWORD%20%D9%83%D9%84%D9%85%D8%A9%20%D8%B3%D8%B1%20%D9%84%D9%88%D8%AD%D8%A9%20%D8%A7%D9%84%D8%A3%D8%AF%D9%85%D9%86%20%E2%80%94%20NEXT_PUBLIC_SITE_URL%20%D9%87%D9%88%20https%3A%2F%2Fzefaf.online)
+
 ## ✨ مميزات المنصة
 
 - **٥٠٠ قالب أنيق** مولّدة من ٢٥ تصميم أساسي × ٢٠ لوحة ألوان (Classic, Modern, Royal, Floral, Islamic, Pharaonic, Vintage…)
