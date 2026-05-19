@@ -15,6 +15,8 @@ create table if not exists public.orders (
   id text primary key,
   slug text unique not null,
   template_id text not null,
+  tier text default 'basic' not null
+    check (tier in ('basic', 'premium', 'vip')),
   created_at timestamptz default now() not null,
   status text not null default 'pending_payment'
     check (status in ('pending_payment', 'pending_review', 'paid', 'rejected')),

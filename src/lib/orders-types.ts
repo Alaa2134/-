@@ -4,6 +4,7 @@ export interface Order {
   id: string;
   slug: string;
   templateId: string;
+  tier?: "basic" | "premium" | "vip";
   createdAt: string;
   status: OrderStatus;
   price: number;
@@ -12,11 +13,19 @@ export interface Order {
     brideName: string;
     date: string;
     venue: string;
+    venueMapUrl?: string; // Google Maps link or coords
     time: string;
     message: string;
     groomPhoto?: string;
     bridePhoto?: string;
     couplePhoto?: string;
+    gallery?: string[]; // additional photos (premium)
+    groomFatherName?: string;
+    brideFatherName?: string;
+    groomMotherName?: string;
+    brideMotherName?: string;
+    storyTitle?: string;
+    storyText?: string;
     enableMusic: boolean;
     musicChoice: string;
   };

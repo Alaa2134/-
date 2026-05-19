@@ -4,13 +4,13 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, Upload, Lock, ChevronRight, X, Heart, Send } from "lucide-react";
+import { Sparkles, Upload, Lock, ChevronRight, X, Heart, Send, Crown, Star } from "lucide-react";
 import { Template } from "@/lib/templates";
 import { TemplatePreview } from "./TemplatePreview";
 import { useDraft } from "@/lib/store";
 import { Logo } from "./Logo";
 import { formatEgp, arabicNumber } from "@/lib/utils";
-import { SITE } from "@/lib/config";
+import { SITE, TIER_LIST, TIERS, type TierId } from "@/lib/config";
 import { compressImage } from "@/lib/compress";
 
 const TITLES_GROOM = ["", "أستاذ", "مهندس", "دكتور", "كابتن", "الحاج", "المهندس"];
@@ -27,10 +27,13 @@ export function EditorClient({ template }: { template: Template }) {
   const [showExitIntent, setShowExitIntent] = useState(false);
   const [titleGroom, setTitleGroom] = useState("أستاذ");
   const [titleBride, setTitleBride] = useState("آنسة");
-  const [removeBranding, setRemoveBranding] = useState(false);
+  const [tierId, setTierId] = useState<TierId>("basic");
   const [submitting, setSubmitting] = useState(false);
 
-  const totalPrice = template.price + (removeBranding ? SITE.brandingRemovalPrice : 0);
+  const tier = TIERS[tierId];
+  const unlocked = tier.unlocks;
+  const removeBranding = unlocked.removeBranding ?? false;
+  const totalPrice = tier.price;
 
   useEffect(() => {
     if (hydrated && draft.templateId !== template.id) setTemplate(template.id);
@@ -83,16 +86,25 @@ export function EditorClient({ template }: { template: Template }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           templateId: template.id,
+          tier: tierId,
           invitation: {
             groomName: fullGroomName,
             brideName: fullBrideName,
             date: draft.date,
             venue: draft.venue || "سيتم الإعلان قريباً",
+            venueMapUrl: draft.venueMapUrl,
             time: draft.time || "بعد العشاء",
             message: draft.message,
             groomPhoto: draft.groomPhoto,
             bridePhoto: draft.bridePhoto,
             couplePhoto: draft.couplePhoto,
+            gallery: unlocked.gallery ? draft.gallery ?? [] : [],
+            groomFatherName: unlocked.parents ? draft.groomFatherName : undefined,
+            brideFatherName: unlocked.parents ? draft.brideFatherName : undefined,
+            groomMotherName: unlocked.parents ? draft.groomMotherName : undefined,
+            brideMotherName: unlocked.parents ? draft.brideMotherName : undefined,
+            storyTitle: unlocked.story ? draft.storyTitle : undefined,
+            storyText: unlocked.story ? draft.storyText : undefined,
             enableMusic: draft.enableMusic,
             musicChoice: draft.musicChoice,
           },
@@ -202,6 +214,11 @@ export function EditorClient({ template }: { template: Template }) {
 
           <Section title="مكان الفرح">
             <Input value={draft.venue} onChange={(v) => setField("venue", v)} placeholder="قاعة الفخامة - القاهرة" />
+            <Input
+              value={draft.venueMapUrl ?? ""}
+              onChange={(v) => setField("venueMapUrl", v)}
+              placeholder="(اختياري) لينك خرايط جوجل للقاعة"
+            />
           </Section>
 
           <Section title="كلمة من القلب">
@@ -237,31 +254,92 @@ export function EditorClient({ template }: { template: Template }) {
             </div>
           </Section>
 
-          <div className="rounded-2xl border-2 border-gold-200 bg-gradient-to-l from-gold-50 to-rose-50 p-4">
-            <div className="flex items-start justify-between gap-3">
-              <div>
-                <div className="font-bold text-ink-900">⭐ شيل توقيع &quot;صُنع بواسطة زفاف&quot;</div>
-                <p className="mt-1 text-xs text-ink-600">
-                  تظهر دعوتك بالكامل بدون أي إشارة للمنصة. ضيوفك يشوفوها كأنها مصممة خصيصاً لكم بس
-                </p>
-                <div className="mt-2 text-sm font-bold text-gold-700">
-                  +{formatEgp(SITE.brandingRemovalPrice)}
-                </div>
+          {/* Premium-only sections — unlocked by tier */}
+          {unlocked.parents && (
+            <Section title="👨‍👩‍👧‍👦 أسماء الأهل (اختياري)">
+              <div className="grid gap-2 sm:grid-cols-2">
+                <Input value={draft.groomFatherName ?? ""} onChange={(v) => setField("groomFatherName", v)} placeholder="والد العريس" />
+                <Input value={draft.brideFatherName ?? ""} onChange={(v) => setField("brideFatherName", v)} placeholder="والد العروسة" />
+                <Input value={draft.groomMotherName ?? ""} onChange={(v) => setField("groomMotherName", v)} placeholder="والدة العريس" />
+                <Input value={draft.brideMotherName ?? ""} onChange={(v) => setField("brideMotherName", v)} placeholder="والدة العروسة" />
               </div>
-              <button
-                onClick={() => setRemoveBranding((v) => !v)}
-                className={`relative h-6 w-12 flex-none rounded-full transition ${
-                  removeBranding ? "bg-gold-500" : "bg-ink-300"
-                }`}
-              >
-                <span
-                  className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition ${
-                    removeBranding ? "right-0.5" : "left-0.5"
+            </Section>
+          )}
+
+          {unlocked.story && (
+            <Section title="💕 قصتنا (اختياري)">
+              <Input
+                value={draft.storyTitle ?? ""}
+                onChange={(v) => setField("storyTitle", v)}
+                placeholder="عنوان (مثلاً: لقاؤنا الأول)"
+              />
+              <textarea
+                value={draft.storyText ?? ""}
+                onChange={(e) => setField("storyText", e.target.value)}
+                rows={3}
+                className="mt-2 w-full rounded-xl border border-ink-100 bg-white px-3 py-2.5 text-sm focus:border-gold-400 focus:outline-none"
+                placeholder="احكي قصة لقاؤكم وحياتكم سوا — هتظهر في قسم خاص بدعوتكم"
+              />
+            </Section>
+          )}
+
+          {unlocked.gallery && (
+            <Section title="🖼️ معرض صور (اختياري — حتى ١٢ صورة)">
+              <GallerySlots
+                items={draft.gallery ?? []}
+                onChange={(items) => setField("gallery", items)}
+                onAdd={async (file) => {
+                  if (!file) return;
+                  if (file.size > 12 * 1024 * 1024) return alert("الصورة كبيرة جداً");
+                  try {
+                    const c = await compressImage(file, 1400, 0.78);
+                    const list = draft.gallery ?? [];
+                    if (list.length >= 12) return alert("الحد الأقصى ١٢ صورة");
+                    setField("gallery", [...list, c]);
+                  } catch {}
+                }}
+              />
+            </Section>
+          )}
+
+          {/* Tier picker */}
+          <Section title="💎 اختار الباقة">
+            <div className="grid gap-2">
+              {TIER_LIST.map((t) => (
+                <button
+                  key={t.id}
+                  onClick={() => setTierId(t.id)}
+                  className={`relative rounded-2xl border-2 p-4 text-right transition ${
+                    tierId === t.id
+                      ? "border-gold-500 bg-gold-50 shadow-md"
+                      : "border-ink-100 bg-white hover:border-ink-200"
                   }`}
-                />
-              </button>
+                >
+                  {t.highlighted && (
+                    <span className="absolute -top-2 right-3 rounded-full bg-rose-600 px-2 py-0.5 text-[10px] font-bold text-white">
+                      الأكثر طلباً
+                    </span>
+                  )}
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <div className="flex items-center gap-1 font-bold text-ink-900">
+                        {t.id === "vip" && <Crown className="h-4 w-4 text-gold-600" />}
+                        {t.id === "premium" && <Star className="h-4 w-4 text-rose-600 fill-rose-600" />}
+                        {t.nameAr}
+                      </div>
+                      <div className="text-xs text-ink-500">{t.tagline}</div>
+                    </div>
+                    <div className="text-right">
+                      <div className="font-display text-2xl font-bold text-gold-700">{formatEgp(t.price)}</div>
+                    </div>
+                  </div>
+                </button>
+              ))}
             </div>
-          </div>
+            <p className="mt-2 text-xs text-ink-500">
+              تقدر تغيّر الباقة في أي وقت قبل الدفع — تفاصيل كل باقة في صفحة الأسعار
+            </p>
+          </Section>
 
           <Section title="🎵 موسيقى الدعوة">
             <div className="flex items-center justify-between rounded-xl bg-ink-50 p-3">
@@ -356,16 +434,9 @@ export function EditorClient({ template }: { template: Template }) {
               متبقى خطوة واحدة بس وفرحك يبقى جاهز للنشر
             </p>
             <div className="my-5 rounded-2xl bg-gold-50 p-4 text-center">
-              <div className="text-xs text-ink-500">الإجمالي</div>
+              <div className="text-xs text-ink-500">الباقة: {tier.nameAr}</div>
               <div className="font-display text-4xl font-bold text-gold-700">{formatEgp(totalPrice)}</div>
-              {removeBranding && (
-                <div className="mt-1 text-xs text-ink-600">
-                  ٥٠ ج قالب + {arabicNumber(SITE.brandingRemovalPrice)} ج إزالة التوقيع
-                </div>
-              )}
-              {!removeBranding && (
-                <div className="mt-1 text-xs text-rose-600">عرض اليوم — وفّرت ١٠٠ ج</div>
-              )}
+              <div className="mt-1 text-xs text-rose-600">{tier.tagline}</div>
             </div>
             <ul className="space-y-2 text-sm text-ink-700">
               <li>✓ لينك خاص بدعوتك</li>
@@ -478,6 +549,44 @@ function PhotoSlot({
         onChange={(e) => onChange(e.target.files?.[0])}
       />
     </label>
+  );
+}
+
+function GallerySlots({
+  items,
+  onAdd,
+  onChange,
+}: {
+  items: string[];
+  onAdd: (file?: File) => void;
+  onChange: (items: string[]) => void;
+}) {
+  return (
+    <div className="grid grid-cols-4 gap-2">
+      {items.map((src, i) => (
+        <div key={i} className="group relative aspect-square overflow-hidden rounded-xl border border-ink-100 bg-ink-50">
+          <img src={src} alt={`gallery-${i}`} className="h-full w-full object-cover" />
+          <button
+            onClick={() => onChange(items.filter((_, j) => j !== i))}
+            className="absolute right-1 top-1 rounded-full bg-black/60 p-1 text-white opacity-0 transition group-hover:opacity-100"
+            aria-label="حذف"
+          >
+            <X className="h-3 w-3" />
+          </button>
+        </div>
+      ))}
+      {items.length < 12 && (
+        <label className="flex aspect-square cursor-pointer items-center justify-center rounded-xl border-2 border-dashed border-ink-200 bg-ink-50 transition hover:border-gold-400 hover:bg-gold-50">
+          <Upload className="h-5 w-5 text-ink-400" />
+          <input
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={(e) => onAdd(e.target.files?.[0])}
+          />
+        </label>
+      )}
+    </div>
   );
 }
 

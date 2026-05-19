@@ -15,8 +15,8 @@ export function Navbar() {
           <Link href="/templates" className="text-sm font-medium text-ink-700 hover:text-gold-700">
             القوالب
           </Link>
-          <Link href="#examples" className="text-sm font-medium text-ink-700 hover:text-gold-700">
-            أمثلة
+          <Link href="/pricing" className="text-sm font-medium text-ink-700 hover:text-gold-700">
+            الأسعار
           </Link>
           <Link href="/dashboard" className="text-sm font-medium text-ink-700 hover:text-gold-700">
             دعوتي
@@ -42,8 +42,8 @@ export function Navbar() {
             <Link onClick={() => setOpen(false)} href="/templates" className="rounded-lg p-2 hover:bg-gold-50">
               القوالب
             </Link>
-            <Link onClick={() => setOpen(false)} href="#examples" className="rounded-lg p-2 hover:bg-gold-50">
-              أمثلة
+            <Link onClick={() => setOpen(false)} href="/pricing" className="rounded-lg p-2 hover:bg-gold-50">
+              الأسعار
             </Link>
             <Link onClick={() => setOpen(false)} href="/dashboard" className="rounded-lg p-2 hover:bg-gold-50">
               دعوتي
