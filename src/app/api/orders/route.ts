@@ -9,6 +9,7 @@ export async function POST(req: NextRequest) {
   }
   const order = await createOrder({
     templateId: body.templateId,
+    tier: body.tier,
     price: body.price,
     invitation: body.invitation,
     customer: body.customer ?? {},

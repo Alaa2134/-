@@ -21,7 +21,11 @@ export type AnimationStyle =
   | "sparkle"
   | "fade"
   | "curtain"
-  | "fireworks";
+  | "fireworks"
+  | "lanterns"
+  | "snow"
+  | "confetti"
+  | "stars";
 
 export interface ColorPalette {
   id: string;
@@ -88,6 +92,17 @@ export const BASE_TEMPLATES: BaseTemplate[] = [
   { id: "asalah", nameAr: "أصالة", category: "classic", layout: "framed", decorativeStyle: "ornament", defaultAnimation: "hearts" },
   { id: "tarab", nameAr: "طرب", category: "vintage", layout: "card", decorativeStyle: "calligraphy", defaultAnimation: "fade" },
   { id: "izz", nameAr: "عز", category: "pharaonic", layout: "split", decorativeStyle: "geometric", defaultAnimation: "sparkle" },
+  // Extra base templates (Phase 2)
+  { id: "fanous", nameAr: "فانوس", category: "islamic", layout: "centered", decorativeStyle: "arch", defaultAnimation: "lanterns" },
+  { id: "noujoom", nameAr: "نجوم", category: "modern", layout: "stacked", decorativeStyle: "geometric", defaultAnimation: "stars" },
+  { id: "habayeb", nameAr: "حبايب", category: "classic", layout: "card", decorativeStyle: "ornament", defaultAnimation: "hearts" },
+  { id: "narges", nameAr: "نرجس", category: "garden", layout: "framed", decorativeStyle: "wreath", defaultAnimation: "petals" },
+  { id: "qasr", nameAr: "قصر", category: "royal", layout: "centered", decorativeStyle: "arch", defaultAnimation: "sparkle" },
+  { id: "saraya", nameAr: "سرايا", category: "luxury", layout: "split", decorativeStyle: "ornament", defaultAnimation: "fireworks" },
+  { id: "henna-night", nameAr: "ليلة الحنّة", category: "vintage", layout: "card", decorativeStyle: "calligraphy", defaultAnimation: "confetti" },
+  { id: "lulwa", nameAr: "لولوة", category: "minimal", layout: "centered", decorativeStyle: "calligraphy", defaultAnimation: "snow" },
+  { id: "majd", nameAr: "مجد", category: "pharaonic", layout: "framed", decorativeStyle: "geometric", defaultAnimation: "fireworks" },
+  { id: "raqia", nameAr: "راقية", category: "luxury", layout: "stacked", decorativeStyle: "ornament", defaultAnimation: "sparkle" },
 ];
 
 // ============================================================
@@ -119,7 +134,18 @@ export const PALETTES: ColorPalette[] = [
 // ============================================================
 // Animation styles
 // ============================================================
-export const ANIMATIONS: AnimationStyle[] = ["petals", "hearts", "sparkle", "fade", "curtain", "fireworks"];
+export const ANIMATIONS: AnimationStyle[] = [
+  "petals",
+  "hearts",
+  "sparkle",
+  "fade",
+  "curtain",
+  "fireworks",
+  "lanterns",
+  "snow",
+  "confetti",
+  "stars",
+];
 
 // ============================================================
 // Generate the 500-template catalog deterministically
@@ -130,12 +156,18 @@ function seededAnimation(baseId: string, paletteIndex: number, defaultAnim: Anim
   return ANIMATIONS[(paletteIndex + baseId.charCodeAt(0)) % ANIMATIONS.length];
 }
 
+const TARGET_COUNT = 500;
+
 export const TEMPLATES: Template[] = (() => {
   const list: Template[] = [];
   let counter = 1;
 
-  for (const base of BASE_TEMPLATES) {
-    PALETTES.forEach((palette, pIdx) => {
+  // Interleave bases × palettes to ensure variety across categories in the
+  // first results (so the gallery doesn't show 20 of the same base in a row).
+  for (let pIdx = 0; pIdx < PALETTES.length; pIdx++) {
+    for (let bIdx = 0; bIdx < BASE_TEMPLATES.length; bIdx++) {
+      const base = BASE_TEMPLATES[bIdx];
+      const palette = PALETTES[pIdx];
       const id = `t${String(counter).padStart(3, "0")}`;
       const animation = seededAnimation(base.id, pIdx, base.defaultAnimation);
       const featured = counter % 17 === 0;
@@ -156,10 +188,11 @@ export const TEMPLATES: Template[] = (() => {
         popularity,
       });
       counter++;
-    });
+    }
   }
 
-  return list;
+  // Cap at exactly TARGET_COUNT templates (35 bases × 20 palettes = 700 → 500)
+  return list.slice(0, TARGET_COUNT);
 })();
 
 export const CATEGORIES: { id: TemplateCategory | "all"; nameAr: string; icon: string }[] = [

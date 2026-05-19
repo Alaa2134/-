@@ -6,6 +6,7 @@ interface OrderRow {
   id: string;
   slug: string;
   template_id: string;
+  tier: string | null;
   created_at: string;
   status: OrderStatus;
   price: number;
@@ -26,6 +27,7 @@ function fromRow(row: OrderRow, rsvps: RSVP[] = []): Order {
     id: row.id,
     slug: row.slug,
     templateId: row.template_id,
+    tier: (row.tier as Order["tier"]) ?? "basic",
     createdAt: row.created_at,
     status: row.status,
     price: row.price,
@@ -135,6 +137,7 @@ export async function sb_createOrder(input: Omit<Order, "id" | "slug" | "created
       id,
       slug,
       template_id: input.templateId,
+      tier: input.tier ?? "basic",
       status: "pending_payment",
       price: input.price,
       remove_branding: input.removeBranding ?? false,

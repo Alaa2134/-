@@ -9,14 +9,20 @@ export interface InvitationDraft {
   brideName: string;
   date: string; // ISO
   venue: string;
+  venueMapUrl?: string;
   time: string;
   message: string;
   groomPhoto?: string;
   bridePhoto?: string;
   couplePhoto?: string;
+  gallery?: string[];
   groomPhone?: string;
   brideFatherName?: string;
   groomFatherName?: string;
+  brideMotherName?: string;
+  groomMotherName?: string;
+  storyTitle?: string;
+  storyText?: string;
   enableMusic: boolean;
   musicChoice: string;
 }

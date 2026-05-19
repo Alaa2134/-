@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
-import { Heart, Share2, Music, MapPin, Calendar, Clock, Sparkles, ChevronDown, Camera } from "lucide-react";
+import { Heart, Share2, Music, MapPin, Calendar, Clock, Sparkles, ChevronDown, Camera, Users } from "lucide-react";
 import { Template } from "@/lib/templates";
 import { Order } from "@/lib/orders";
 import { TemplateAnimation } from "./TemplateAnimation";
@@ -272,6 +272,67 @@ export function InvitationView({ order, template }: { order: Order; template: Te
         </Section>
       )}
 
+      {/* PARENTS */}
+      {(order.invitation.groomFatherName || order.invitation.brideFatherName) && (
+        <Section bg={p.surface}>
+          <SectionTitle palette={p}>بحضور الأهل الكرام</SectionTitle>
+          <div className="mt-8 grid gap-6 sm:grid-cols-2">
+            <FamilyCard
+              role="عائلة العريس"
+              father={order.invitation.groomFatherName}
+              mother={order.invitation.groomMotherName}
+              palette={p}
+              side="right"
+            />
+            <FamilyCard
+              role="عائلة العروسة"
+              father={order.invitation.brideFatherName}
+              mother={order.invitation.brideMotherName}
+              palette={p}
+              side="left"
+            />
+          </div>
+        </Section>
+      )}
+
+      {/* STORY */}
+      {order.invitation.storyText && (
+        <Section bg={p.bg}>
+          <SectionTitle palette={p}>{order.invitation.storyTitle || "قصتنا"}</SectionTitle>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.8 }}
+            className="mt-6 rounded-3xl p-6 text-center font-display text-lg leading-loose shadow ring-1 backdrop-blur"
+            style={{ background: p.surface, color: p.text, borderColor: p.accent + "33" }}
+          >
+            {order.invitation.storyText}
+          </motion.div>
+        </Section>
+      )}
+
+      {/* GALLERY */}
+      {order.invitation.gallery && order.invitation.gallery.length > 0 && (
+        <Section bg={p.surface}>
+          <SectionTitle palette={p}>لحظات من حياتنا</SectionTitle>
+          <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3">
+            {order.invitation.gallery.map((src, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.5, delay: (i % 6) * 0.06 }}
+                className="aspect-square overflow-hidden rounded-2xl shadow-lg"
+              >
+                <img src={src} alt={`memory-${i}`} className="h-full w-full object-cover transition-transform duration-700 hover:scale-110" />
+              </motion.div>
+            ))}
+          </div>
+        </Section>
+      )}
+
       {/* COUNTDOWN */}
       <Section bg={p.surface}>
         <motion.div
@@ -349,12 +410,35 @@ export function InvitationView({ order, template }: { order: Order; template: Te
           />
         </div>
 
+        {/* Embedded Google Map (premium+) */}
+        {order.invitation.venueMapUrl && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.6 }}
+            className="mt-6 overflow-hidden rounded-2xl shadow-xl ring-1 ring-black/10"
+            style={{ height: 280 }}
+          >
+            <iframe
+              src={`https://maps.google.com/maps?q=${encodeURIComponent(order.invitation.venue)}&output=embed`}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              className="h-full w-full border-0"
+              title="map"
+            />
+          </motion.div>
+        )}
+
         <motion.a
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.4 }}
-          href={`https://maps.google.com/?q=${encodeURIComponent(order.invitation.venue)}`}
+          href={
+            order.invitation.venueMapUrl ||
+            `https://maps.google.com/?q=${encodeURIComponent(order.invitation.venue)}`
+          }
           target="_blank"
           rel="noopener"
           className="mt-6 flex items-center justify-center gap-2 rounded-2xl px-6 py-4 font-bold text-white shadow-xl transition hover:scale-[1.02]"
@@ -500,6 +584,46 @@ function PhotoCard({
           <p className="mt-1 font-display text-2xl font-bold drop-shadow-md sm:text-3xl">{name}</p>
         </div>
       </div>
+    </motion.div>
+  );
+}
+
+function FamilyCard({
+  role,
+  father,
+  mother,
+  palette,
+  side,
+}: {
+  role: string;
+  father?: string;
+  mother?: string;
+  palette: Template["palette"];
+  side: "right" | "left";
+}) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: side === "right" ? 40 : -40 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ duration: 0.7 }}
+      className="rounded-2xl p-6 text-center shadow-lg"
+      style={{ background: palette.surface, border: `1px solid ${palette.accent}33` }}
+    >
+      <Users className="mx-auto h-6 w-6" style={{ color: palette.primary }} />
+      <div className="mt-3 text-xs uppercase tracking-widest" style={{ color: palette.muted }}>
+        {role}
+      </div>
+      {father && (
+        <div className="mt-2 font-display text-lg font-bold" style={{ color: palette.text }}>
+          {father}
+        </div>
+      )}
+      {mother && (
+        <div className="font-display text-base" style={{ color: palette.muted }}>
+          {mother}
+        </div>
+      )}
     </motion.div>
   );
 }
